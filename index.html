@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descubra Seu Arquétipo de Marca</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f7ff;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .btn-primary {
+            background-color: #8833cc;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #6928a1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(136, 51, 204, 0.25);
+        }
+        .progress-bar {
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #8833cc, #a866e0);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Cabeçalho -->
+        <header class="bg-purple-800 text-white py-4">
+            <div class="container mx-auto px-4">
+                <h1 class="text-2xl md:text-3xl font-bold text-center">Teste de Arquétipo de Marca</h1>
+            </div>
+        </header>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-grow container mx-auto px-4 py-8">
+            <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+                
+                <!-- Tela Inicial -->
+                <div id="start-screen" class="p-6 md:p-8 text-center">
+                    <h2 class="text-2xl md:text-3xl font-bold text-purple-800 mb-6">Descubra Seu Arquétipo de Marca</h2>
+                    <p class="text-gray-700 mb-6">
+                        Este teste revelará qual dos 12 arquétipos de marca representa melhor sua personalidade e valores.
+                        Descubra se você é um Explorador, um Herói, um Criador ou outro arquétipo fascinante!
+                    </p>
+                    <button id="start-button" class="btn-primary font-semibold py-3 px-6 rounded-full text-lg">
+                        Começar o Teste
+                    </button>
+                </div>
+
+                <!-- Tela do Teste -->
+                <div id="quiz-screen" class="p-6 md:p-8 hidden">
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span id="question-counter" class="text-sm font-medium text-gray-700">
+                                Pergunta 1 de 5
+                            </span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full">
+                            <div id="progress-bar" class="progress-bar w-0"></div>
+                        </div>
+                    </div>
+                    
+                    <h2 id="question-text" class="text-xl md:text-2xl font-bold text-gray-800 mb-6">
+                        <!-- Texto da Pergunta -->
+                    </h2>
+                    
+                    <div id="answers-container" class="space-y-3">
+                        <!-- Opções de Resposta -->
+                    </div>
+                </div>
+
+                <!-- Tela de Formulário -->
+                <div id="form-screen" class="p-6 md:p-8 hidden">
+                    <h2 class="text-2xl md:text-3xl font-bold text-purple-800 mb-6">Estamos calculando seu resultado!</h2>
+                    <p class="text-gray-700 mb-6">
+                        Para receber seu resultado e entrar em nosso grupo exclusivo de WhatsApp, 
+                        preencha suas informações abaixo:
+                    </p>
+                    <form id="lead-form" class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-gray-700 font-medium mb-1">Nome completo</label>
+                            <input type="text" id="name" name="name" required 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-700 font-medium mb-1">E-mail</label>
+                            <input type="email" id="email" name="email" required 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-gray-700 font-medium mb-1">WhatsApp (com DDD)</label>
+                            <input type="tel" id="phone" name="phone" required 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        </div>
+                        <div class="pt-4">
+                            <button type="submit" class="btn-primary w-full font-semibold py-3 px-6 rounded-lg text-lg">
+                                Ver Meu Resultado
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tela de Resultado -->
+                <div id="result-screen" class="p-6 md:p-8 text-center hidden">
+                    <h2 class="text-2xl md:text-3xl font-bold text-purple-800 mb-4">Seu Arquétipo é:</h2>
+                    <h3 id="result-title" class="text-3xl md:text-4xl font-extrabold text-purple-900 mb-6">
+                        <!-- Nome do Arquétipo -->
+                    </h3>
+                    
+                    <div class="bg-purple-50 p-6 rounded-lg mb-6">
+                        <p id="result-description" class="text-gray-800 mb-4">
+                            <!-- Descrição do Arquétipo -->
+                        </p>
+                        <p id="result-brands" class="text-gray-700">
+                            <!-- Marcas similares -->
+                        </p>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <a id="whatsapp-button" href="#" target="_blank" 
+                           class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-colors duration-300">
+                            <span class="flex items-center justify-center">
+                                <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                                </svg>
+                                Entrar no Grupo do WhatsApp
+                            </span>
+                        </a>
+                    </div>
+                    
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <p class="text-sm text-gray-600">
+                            Compartilhe este resultado ou converse conosco para saber como aplicar 
+                            este conhecimento na construção da sua marca!
+                        </p>
+                        <button id="restart-button" class="mt-4 text-purple-700 hover:text-purple-900 font-medium">
+                            Refazer o teste
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Rodapé -->
+        <footer class="bg-gray-100 py-6">
+            <div class="container mx-auto px-4">
+                <p class="text-center text-gray-600 text-sm">
+                    © 2025 Teste de Arquétipo de Marca. Todos os direitos reservados.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Dados do Teste
+        const questions = [
+            {
+                question: "Como você gostaria que os outros te vissem?",
+                answers: [
+                    { text: "Como uma pessoa otimista e positiva", archetype: "inocente" },
+                    { text: "Como alguém aventureiro e independente", archetype: "explorador" },
+                    { text: "Como inteligente e ponderado", archetype: "sabio" },
+                    { text: "Como forte e destemido", archetype: "heroi" },
+                    { text: "Como rebelde e original", archetype: "fora_da_lei" },
+                    { text: "Como visionário e transformador", archetype: "mago" },
+                    { text: "Como autêntico e confiável", archetype: "pessoa_comum" },
+                    { text: "Como sedutor e atraente", archetype: "amante" },
+                    { text: "Como divertido e espontâneo", archetype: "bobo" },
+                    { text: "Como generoso e atencioso", archetype: "cuidador" },
+                    { text: "Como inovador e criativo", archetype: "criador" },
+                    { text: "Como poderoso e influente", archetype: "governante" }
+                ]
+            },
+            {
+                question: "Qual frase mais te representa?",
+                answers: [
+                    { text: "Acredito no potencial do ser humano", archetype: "inocente" },
+                    { text: "Preciso encontrar meu próprio caminho", archetype: "explorador" },
+                    { text: "O conhecimento é poder", archetype: "sabio" },
+                    { text: "Onde há vontade, há um caminho", archetype: "heroi" },
+                    { text: "Regras foram feitas para serem quebradas", archetype: "fora_da_lei" },
+                    { text: "Tudo é possível se você acreditar", archetype: "mago" },
+                    { text: "Seja você mesmo", archetype: "pessoa_comum" },
+                    { text: "Viva intensamente cada momento", archetype: "amante" },
+                    { text: "Rir é o melhor remédio", archetype: "bobo" },
+                    { text: "Ajudar os outros é minha missão", archetype: "cuidador" },
+                    { text: "Criar é existir", archetype: "criador" },
+                    { text: "Liderar pelo exemplo", archetype: "governante" }
+                ]
+            },
+            {
+                question: "O que mais te motiva?",
+                answers: [
+                    { text: "Viver em harmonia e felicidade", archetype: "inocente" },
+                    { text: "Descobrir novos horizontes", archetype: "explorador" },
+                    { text: "Compreender o mundo ao meu redor", archetype: "sabio" },
+                    { text: "Superar desafios", archetype: "heroi" },
+                    { text: "Ser autêntico e questionar o status quo", archetype: "fora_da_lei" },
+                    { text: "Transformar ideias em realidade", archetype: "mago" },
+                    { text: "Construir conexões genuínas", archetype: "pessoa_comum" },
+                    { text: "Experimentar prazer e beleza", archetype: "amante" },
+                    { text: "Aproveitar a vida com leveza", archetype: "bobo" },
+                    { text: "Cuidar e proteger os outros", archetype: "cuidador" },
+                    { text: "Expressar minha visão única", archetype: "criador" },
+                    { text: "Obter controle e sucesso", archetype: "governante" }
+                ]
+            },
+            {
+                question: "Como você lida com problemas?",
+                answers: [
+                    { text: "Mantenho a fé que tudo ficará bem", archetype: "inocente" },
+                    { text: "Busco novos caminhos e alternativas", archetype: "explorador" },
+                    { text: "Analiso a situação para encontrar a solução ideal", archetype: "sabio" },
+                    { text: "Enfrento-os de cabeça erguida", archetype: "heroi" },
+                    { text: "Questiono as regras estabelecidas", archetype: "fora_da_lei" },
+                    { text: "Vejo os problemas como oportunidades de transformação", archetype: "mago" },
+                    { text: "Uso o bom senso e a experiência", archetype: "pessoa_comum" },
+                    { text: "Busco soluções que tragam harmonia", archetype: "amante" },
+                    { text: "Uso o humor para aliviar a tensão", archetype: "bobo" },
+                    { text: "Ajudo os outros a superarem dificuldades", archetype: "cuidador" },
+                    { text: "Crio soluções inovadoras", archetype: "criador" },
+                    { text: "Assumo o comando e tomo decisões", archetype: "governante" }
+                ]
+            },
+            {
+                question: "O que você mais valoriza nas marcas que consome?",
+                answers: [
+                    { text: "Simplicidade e valores positivos", archetype: "inocente" },
+                    { text: "Autenticidade e liberdade", archetype: "explorador" },
+                    { text: "Expertise e informações fundamentadas", archetype: "sabio" },
+                    { text: "Determinação e excelência", archetype: "heroi" },
+                    { text: "Originalidade e irreverência", archetype: "fora_da_lei" },
+                    { text: "Inovação e transformação", archetype: "mago" },
+                    { text: "Honestidade e confiabilidade", archetype: "pessoa_comum" },
+                    { text: "Prazer e experiências sensoriais", archetype: "amante" },
+                    { text: "Diversão e descontração", archetype: "bobo" },
+                    { text: "Empatia e suporte", archetype: "cuidador" },
+                    { text: "Criatividade e qualidade", archetype: "criador" },
+                    { text: "Tradição e prestígio", archetype: "governante" }
+                ]
+            }
+        ];
+
+        const archetypeInfo = {
+            inocente: {
+                name: "O Inocente",
+                description: "Otimista e sonhador, o Inocente busca a felicidade e a simplicidade. Valoriza a pureza, a bondade e vê o mundo com olhos esperançosos. Seu objetivo é ser feliz e deseja criar um mundo melhor através da positividade.",
+                brands: "Marcas similares: Dove, Coca-Cola, McDonald's"
+            },
+            explorador: {
+                name: "O Explorador",
+                description: "Aventureiro e independente, o Explorador busca descobrir o mundo e sua própria identidade. Valoriza a liberdade, a autenticidade e as experiências novas. Seu objetivo é encontrar um caminho próprio e viver uma vida autêntica.",
+                brands: "Marcas similares: Jeep, Patagonia, National Geographic"
+            },
+            sabio: {
+                name: "O Sábio",
+                description: "Analítico e estratégico, o Sábio busca a verdade e o conhecimento. Valoriza a inteligência, a expertise e a compreensão. Seu objetivo é usar o conhecimento para entender o mundo e compartilhar sabedoria.",
+                brands: "Marcas similares: Google, TED, The Economist"
+            },
+            heroi: {
+                name: "O Herói",
+                description: "Corajoso e determinado, o Herói busca provar seu valor através de atos de coragem. Valoriza a força, a competência e a superação de desafios. Seu objetivo é melhorar o mundo usando sua força e coragem.",
+                brands: "Marcas similares: Nike, Red Bull, Under Armour"
+            },
+            fora_da_lei: {
+                name: "O Fora da Lei",
+                description: "Rebelde e revolucionário, o Fora da Lei quebra regras e questiona o status quo. Valoriza a liberdade, a irreverência e a originalidade. Seu objetivo é derrubar o que não funciona e abrir caminho para algo novo.",
+                brands: "Marcas similares: Harley-Davidson, Virgin, Diesel"
+            },
+            mago: {
+                name: "O Mago",
+                description: "Visionário e carismático, o Mago transforma sonhos em realidade. Valoriza o conhecimento oculto, a intuição e o poder da transformação. Seu objetivo é criar momentos mágicos e ajudar os outros a realizarem seus sonhos.",
+                brands: "Marcas similares: Disney, Apple, Tesla"
+            },
+            pessoa_comum: {
+                name: "A Pessoa Comum",
+                description: "Realista e empático, a Pessoa Comum valoriza a simplicidade e as conexões genuínas. Valoriza a honestidade, o trabalho duro e o pertencimento. Seu objetivo é se conectar com os outros e criar um senso de comunidade.",
+                brands: "Marcas similares: IKEA, Levis, Carrefour"
+            },
+            amante: {
+                name: "O Amante",
+                description: "Apaixonado e sensual, o Amante busca intimidade e conexões profundas. Valoriza a beleza, a sensualidade e o relacionamento. Seu objetivo é criar experiências prazerosas e relacionamentos significativos.",
+                brands: "Marcas similares: Victoria's Secret, Häagen-Dazs, Chanel"
+            },
+            bobo: {
+                name: "O Bobo da Corte",
+                description: "Divertido e espontâneo, o Bobo da Corte vive o momento com alegria. Valoriza o humor, a diversão e a leveza. Seu objetivo é trazer alegria para o mundo e ajudar os outros a aproveitar a vida.",
+                brands: "Marcas similares: Skittles, Old Spice, M&M's"
+            },
+            cuidador: {
+                name: "O Cuidador",
+                description: "Generoso e altruísta, o Cuidador protege e nutre os outros. Valoriza a empatia, a generosidade e o bem-estar. Seu objetivo é ajudar e cuidar dos outros, criando um ambiente seguro e acolhedor.",
+                brands: "Marcas similares: Johnson & Johnson, Nestlé, Volvo"
+            },
+            criador: {
+                name: "O Criador",
+                description: "Inovador e artístico, o Criador expressa sua visão única no mundo. Valoriza a criatividade, a originalidade e a expressão pessoal. Seu objetivo é criar coisas de valor duradouro e inspirar os outros.",
+                brands: "Marcas similares: Lego, Adobe, Canon"
+            },
+            governante: {
+                name: "O Governante",
+                description: "Poderoso e controlador, o Governante busca criar um mundo ordenado e bem-sucedido. Valoriza o poder, o status e a responsabilidade. Seu objetivo é criar prosperidade e sucesso através da ordem e do controle.",
+                brands: "Marcas similares: Rolex, Mercedes-Benz, American Express"
+            }
+        };
+
+        // Variáveis do Teste
+        let currentQuestion = 0;
+        let scores = {
+            inocente: 0,
+            explorador: 0,
+            sabio: 0,
+            heroi: 0,
+            fora_da_lei: 0,
+            mago: 0,
+            pessoa_comum: 0,
+            amante: 0,
+            bobo: 0,
+            cuidador: 0,
+            criador: 0,
+            governante: 0
+        };
+        let userResult = '';
+        let userData = {};
+
+        // CONFIGURE ESTE LINK PARA O SEU GRUPO DO WHATSAPP
+        const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/SEU_LINK_AQUI";
+
+        // Elementos DOM
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const formScreen = document.getElementById('form-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const startButton = document.getElementById('start-button');
+        const questionCounter = document.getElementById('question-counter');
+        const progressBar = document.getElementById('progress-bar');
+        const questionText = document.getElementById('question-text');
+        const answersContainer = document.getElementById('answers-container');
+        const resultTitle = document.getElementById('result-title');
+        const resultDescription = document.getElementById('result-description');
+        const resultBrands = document.getElementById('result-brands');
+        const leadForm = document.getElementById('lead-form');
+        const whatsappButton = document.getElementById('whatsapp-button');
+        const restartButton = document.getElementById('restart-button');
+
+        // Event Listeners
+        startButton.addEventListener('click', startQuiz);
+        leadForm.addEventListener('submit', handleFormSubmit);
+        restartButton.addEventListener('click', restartQuiz);
+
+        // Funções
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            quizScreen.classList.add('fade-in');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            questionCounter.textContent = `Pergunta ${currentQuestion + 1} de ${questions.length}`;
+            questionText.textContent = questions[currentQuestion].question;
+            progressBar.style.width = `${(currentQuestion / questions.length) * 100}%`;
+            
+            // Limpar respostas anteriores
+            answersContainer.innerHTML = '';
+            
+            // Adicionar novas respostas
+            questions[currentQuestion].answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left p-4 border border-gray-300 rounded-lg hover:bg-purple-50 hover:border-purple-300 transition-colors duration-200';
+                button.textContent = answer.text;
+                button.addEventListener('click', () => selectAnswer(answer.archetype));
+                answersContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(archetype) {
+            // Incrementar pontuação
+            scores[archetype]++;
+            
+            // Avançar para próxima pergunta ou finalizar
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showFormScreen();
+            }
+        }
+
+        function showFormScreen() {
+            quizScreen.classList.add('hidden');
+            formScreen.classList.remove('hidden');
+            formScreen.classList.add('fade-in');
+            
+            // Calcular resultado
+            calculateResult();
+        }
+
+        function calculateResult() {
+            let maxScore = 0;
+            let maxArchetype = '';
+            
+            for (const archetype in scores) {
+                if (scores[archetype] > maxScore) {
+                    maxScore = scores[archetype];
+                    maxArchetype = archetype;
+                }
+            }
+            
+            userResult = maxArchetype;
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            // Coletar dados do formulário
+            userData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                archetype: userResult
+            };
+            
+            // Em um ambiente real, você enviaria os dados para seu servidor aqui
+            // saveLeadData(userData);
+            
+            // Mostrar resultado
+            showResultScreen();
+        }
+
+        function showResultScreen() {
+            formScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            resultScreen.classList.add('fade-in');
+            
+            // Preencher informações do resultado
+            resultTitle.textContent = archetypeInfo[userResult].name;
+            resultDescription.textContent = archetypeInfo[userResult].description;
+            resultBrands.textContent = archetypeInfo[userResult].brands;
+            
+            // Configurar link do WhatsApp
+            whatsappButton.href = 'https://chat.whatsapp.com/Id2SJF8JUKa9eR27biWtD0';
+        }
+
+        function restartQuiz() {
+            // Resetar variáveis
+            currentQuestion = 0;
+            scores = {
+                inocente: 0,
+                explorador: 0,
+                sabio: 0,
+                heroi: 0,
+                fora_da_lei: 0,
+                mago: 0,
+                pessoa_comum: 0,
+                amante: 0,
+                bobo: 0,
+                cuidador: 0,
+                criador: 0,
+                governante: 0
+            };
+            userResult = '';
+            userData = {};
+            
+            // Voltar para tela inicial
+            resultScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+            startScreen.classList.add('fade-in');
+        }
+    </script>
+</body>
+</html>
